@@ -9,6 +9,7 @@ import passportMiddleware from "./middlewares/passport";
 import config from "./config/config";
 
 import reportsRoutes from "./routes/reports.routes";
+import authRoutes from "./routes/auth.routes";
 
 // Interfaces
 
@@ -62,5 +63,6 @@ io.on("connection", (socket) => {
 
 // Routes
 app.use("/api", reportsRoutes);
+app.use("/api", authRoutes);
 
 export default server;
