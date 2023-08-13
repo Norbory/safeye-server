@@ -6,22 +6,28 @@ import cors from "cors";
 import passport from "passport";
 import passportMiddleware from "./middlewares/passport";
 
-import config from "./config/config";
-
 import reportsRoutes from "./routes/reports.routes";
 import authRoutes from "./routes/auth.routes";
 
 // Interfaces
+interface Report {
+  company_id: string;
+  place: string;
+  epp: string;
+  time: Date;
+}
 
-interface ServerToClientEvents {}
+interface ServerToClientEvents {
+  sendReport: (report: Report) => void;
+}
 
 interface ClientToServerEvents {
   login: (username: string, company_id: string) => void;
   join: (room: string) => void;
+  incident: (report: Report) => void;
 }
 
 interface SocketData {
-  username: string;
   company_id: string;
 }
 
@@ -49,15 +55,22 @@ passport.use(passportMiddleware);
 // Socket.io
 io.on("connection", (socket) => {
   console.log("New connection", socket.id);
-  socket.on("login", (username, company_id) => {
+  socket.on("login", (company_id) => {
     socket.join(company_id);
-    socket.data.username = username;
     socket.data.company_id = company_id;
-    console.log("User logged in", socket.data);
+    console.log("User logged in room: ", socket.data.company_id);
   });
   socket.on("join", (room) => {
     socket.join(room);
     console.log("User joined room", room);
+  });
+  socket.on("incident", (report) => {
+    console.log("New incident", report);
+    console.log("Sending incident to", socket.data.company_id);
+    io.to(socket.data.company_id).emit("sendReport", report);
+  });
+  socket.on("disconnect", () => {
+    console.log("User disconnected", socket.id);
   });
 });
 
