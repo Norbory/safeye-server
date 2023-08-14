@@ -32,6 +32,14 @@ export const getReports = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const reports = await Report.find({ company_id: req.params.company_id });
+  const reports = await Report.find({
+    company_id: req.params.company_id,
+  })
+    .populate({
+      path: "supervisor",
+      model: "User",
+      select: "name surname",
+    })
+    .exec();
   return res.json(reports);
 };
