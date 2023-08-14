@@ -6,6 +6,7 @@ export interface IReport extends Document {
   epp: string;
   time: Date;
   admonished: boolean;
+  supervisor: Schema.Types.ObjectId;
 }
 
 const reportSchema = new Schema({
@@ -28,6 +29,11 @@ const reportSchema = new Schema({
   },
   admonished: {
     type: Boolean,
+    required: true,
+  },
+  supervisor: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
     required: true,
   },
 });

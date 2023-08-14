@@ -3,7 +3,7 @@ const router = Router();
 
 import { createReport, getReports } from "../controllers/reports.controller";
 
-router.post("/reports", createReport);
+router.post("/create-report", createReport);
 router.get("/reports/:company_id", getReports);
 
 export default router;

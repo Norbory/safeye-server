@@ -6,14 +6,25 @@ export const createReport = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  if (!req.body.place || !req.body.epp || !req.body.time) {
+  if (
+    !req.body.place ||
+    !req.body.epp ||
+    !req.body.time ||
+    !req.body.admonished ||
+    !req.body.company_id ||
+    !req.body.supervisor
+  ) {
     return res
       .status(400)
-      .json({ msg: "Please. Send the place, epp and time" });
+      .json({ msg: "Please. Send all the required fields" });
   }
   const newReport = new Report(req.body);
-  await newReport.save();
-
+  try {
+    await newReport.save();
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
   return res.status(201).json(newReport);
 };
 
