@@ -10,7 +10,6 @@ export const createReport = async (
     !req.body.place ||
     !req.body.epp ||
     !req.body.time ||
-    !req.body.admonished ||
     !req.body.company_id ||
     !req.body.supervisor
   ) {

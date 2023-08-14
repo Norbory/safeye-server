@@ -54,6 +54,7 @@ export const singIn = async (req: Request, res: Response) => {
       last: user.surname,
       email: user.email,
       company_id: user.company_id,
+      _id: user._id,
     }); // TODO: Cambiar la respuesta para que no se envie el password
   }
 
